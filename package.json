@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "build": "npm run lint && echo 'Build successful.'"
   },
   "author": "",
   "license": "ISC",
