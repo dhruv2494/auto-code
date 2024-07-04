@@ -21,7 +21,9 @@ const registerUser = async (req, res) => {
     //   } else {
     //     res.send("User Already Exit");
     //   }
-    createUserServer(a);
+    await createUserServer(a);
+    res.send("server Created")
+    
   } catch (e) {
     // console.log(e);
     res.status(500).send(e);
