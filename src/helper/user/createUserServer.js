@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const runCommandOnDirectory = require("../runCommandOnDirectory");
-
+const { restartServer } = require("../../../index");
 const createUserServer = async (user) => {
   const directoryPath = path.join(
     __dirname,
@@ -111,6 +111,7 @@ const createUserServer = async (user) => {
                       console.log(
                         `text successfully written to second last line of ${userServerRoutePath}`
                       );
+                      restartServer();
                     }
                   );
                 });
