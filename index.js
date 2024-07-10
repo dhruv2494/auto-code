@@ -12,11 +12,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 let serverInstance;
-
 const startServer = () => {
   serverInstance = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log(`visit http://127.0.0.1:${port}`);
+    console.log(`Visit http://127.0.0.1:${port}`);
   });
 
   serverInstance.on("error", (err) => {
@@ -24,27 +23,31 @@ const startServer = () => {
       console.error(`Port ${port} is already in use`);
       process.exit(1); // Exit the process if port is in use
     }
-    // Handle other errors as needed
     console.error(err);
     process.exit(1);
   });
 };
 
-const restartServer = () => {
-  // Close the existing server instance
-  if (serverInstance) {
-    serverInstance.close(() => {
-      console.log("Server instance closed");
-      // Start a new server instance
+
+
+const restartServer = async (req, res) => {
+  return new Promise((resolve, reject) => {
+    // Close the existing server instance
+    if (serverInstance) {
+      serverInstance.close(() => {
+        console.log("Server instance closed");
+        // Start a new server instance
+        startServer(); // This starts the server asynchronously
+        resolve(); // Resolve the promise after restarting
+      });
+    } else {
+      // No server instance to close, start a new one directly
       startServer();
-      res.send("Server restarting...");
-    });
-  } else {
-    // No server instance to close, start a new one directly
-    startServer();
-    res.send("Server restarting...");
-  }
+      resolve(); // Resolve the promise after restarting
+    }
+  });
 };
+
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -63,9 +66,21 @@ app.use("/server", userServerRoute);
 app.get("/", (req, res) => {
   res.render("Home");
 });
+app.get("/restart", async (req, res) => {
+  res.send("Server restarted successfully");
+  res.end()
+  try {
+    await restartServer(req, res);
+    console.log("Server restarted");
+    // Optionally, you can send a response here if needed
+  } catch (err) {
+    console.error("Error restarting server:", err);
+    res.status(500).send("Error occurred while restarting server");
+  }
+});
 
 
 
-startServer()
+startServer();
 
-module.exports={app,serverInstance,restartServer}
+module.exports = { app, serverInstance, restartServer };
