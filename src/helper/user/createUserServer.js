@@ -1,13 +1,11 @@
 const fs = require("fs");
 const path = require("path");
 const runCommandOnDirectory = require("../runCommandOnDirectory");
-const { restartServer } = require("../../serverControl/serverControl");
 const createUserServer = async (user) => {
   const directoryPath = path.join(
     __dirname,
     `./../../subServers/${user.username}`
   );
-  // Ensure all parent directories exist
   await fs.mkdir(directoryPath, { recursive: true }, async (err) => {
     if (err) {
       console.error("Error creating directory:", err);
@@ -52,8 +50,7 @@ const createUserServer = async (user) => {
     
                 app.use(bodyParser.json());
                 app.use(cors());
-    
-                // Example route
+
                 app.get('/', (req, res) => {
                   res.send('Hello World');
                 });
@@ -86,19 +83,14 @@ const createUserServer = async (user) => {
                     return;
                   }
 
-                  // Split the content by lines
                   let lines = data.split("\n");
 
-                  // Calculate the index of the second last line
                   const secondLastIndex = lines.length - 2;
 
-                  // Insert the new text at the second last line
                   lines.splice(secondLastIndex, 0, newText);
 
-                  // Join the lines back into a single string with newline characters
                   const updatedContent = lines.join("\n");
 
-                  // Write the updated content back to the file
                   fs.writeFile(
                     userServerRoutePath,
                     updatedContent,
@@ -112,14 +104,20 @@ const createUserServer = async (user) => {
                         `text successfully written to second last line of ${userServerRoutePath}`
                       );
                       try {
-                        // await restartServer();
-                        fs.appendFile(path.resolve(__dirname, '../../../restart.js'), 'restart\n', (err) => {
-                          if (err) {
-                            console.error("Error writing to restart.js:", err);
-                          } else {
-                            console.log("Successfully wrote to restart.js");
+                        fs.appendFile(
+                          path.resolve(__dirname, "../../../restart.js"),
+                          "restart\n",
+                          (err) => {
+                            if (err) {
+                              console.error(
+                                "Error writing to restart.js:",
+                                err
+                              );
+                            } else {
+                              console.log("Successfully wrote to restart.js");
+                            }
                           }
-                        });
+                        );
                         console.log("Server restarted");
                       } catch (err) {
                         console.error("Error restarting server:", err);
