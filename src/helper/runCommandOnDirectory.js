@@ -19,7 +19,6 @@ const runCommandOnDirectory = (command, path) => {
       resolve(stdout);
     });
 
-    // Optional: Forward child process's stdout and stderr to current process
     childProcess.stdout.pipe(process.stdout);
     childProcess.stderr.pipe(process.stderr);
   });

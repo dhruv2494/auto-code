@@ -2,7 +2,6 @@ const createUserServer = require("../helper/user/createUserServer");
 const user = require("../models/userModel");
 
 const registerUser = async (req, res) => {
-  // console.log("controller");
   try {
     const { username, name, email, m_number, password } = req.body;
     let c = await user.find({ email: email });
@@ -18,7 +17,7 @@ const registerUser = async (req, res) => {
       });
 
       res.status(201).send(a);
-      createUserServer(a)
+      createUserServer(a);
     } else {
       res.send("User Already Exit");
     }
@@ -27,7 +26,5 @@ const registerUser = async (req, res) => {
     res.status(500).send(e);
   }
 };
-
-
 
 module.exports = { registerUser };
