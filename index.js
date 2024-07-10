@@ -1,7 +1,7 @@
 const express = require("express");
 const { exec } = require("child_process");
 
-// const app = express();
+const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 4000;
 const bodyParser = require("body-parser");
@@ -10,18 +10,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoute = require("./src/routes/userRoute");
 const userServerRoute = require("./src/routes/userServerRoute");
-const {
-  startServer,
-  restartServer,
-  app,
-} = require("./src/serverControl/serverControl");
+// const {
+//   startServer,
+//   restartServer,
+//   app,
+// } = require("./src/serverControl/serverControl");
 
-
-
-
-startServer();
-
-
+// startServer();
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -102,5 +97,7 @@ app.get("/restart", (req, res) => {
     res.send("Server restarting...");
   });
 });
-
-module.exports = { app };
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+  console.log(`Visit http://127.0.0.1:${port}`);
+});
