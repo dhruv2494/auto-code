@@ -115,9 +115,9 @@ const createUserServer = async (user) => {
                         // await restartServer();
                         fs.appendFile(path.resolve(__dirname, '../../../restart.js'), 'restart\n', (err) => {
                           if (err) {
-                            console.error("Error writing to resCheck.js:", err);
+                            console.error("Error writing to restart.js:", err);
                           } else {
-                            console.log("Successfully wrote to resCheck.js");
+                            console.log("Successfully wrote to restart.js");
                           }
                         });
                         console.log("Server restarted");
