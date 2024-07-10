@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const runCommandOnDirectory = require("../runCommandOnDirectory");
-
+const { restartServer } = require("../../serverControl/serverControl");
 const createUserServer = async (user) => {
   const directoryPath = path.join(
     __dirname,
@@ -78,7 +78,7 @@ const createUserServer = async (user) => {
                   "userServerRoute.js"
                 );
 
-                fs.readFile(userServerRoutePath, "utf8", (err, data) => {
+                fs.readFile(userServerRoutePath, "utf8", async (err, data) => {
                   const newText = `userServerRoute.use("/${user.username}", require("./../subServers/${user.username}/index"));`;
 
                   if (err) {
@@ -103,7 +103,7 @@ const createUserServer = async (user) => {
                     userServerRoutePath,
                     updatedContent,
                     "utf8",
-                    (err) => {
+                    async (err) => {
                       if (err) {
                         console.error(`Error writing file: ${err}`);
                         return;
@@ -111,6 +111,19 @@ const createUserServer = async (user) => {
                       console.log(
                         `text successfully written to second last line of ${userServerRoutePath}`
                       );
+                      try {
+                        // await restartServer();
+                        fs.appendFile(path.resolve(__dirname, '../../../restart.js'), 'restart\n', (err) => {
+                          if (err) {
+                            console.error("Error writing to restart.js:", err);
+                          } else {
+                            console.log("Successfully wrote to restart.js");
+                          }
+                        });
+                        console.log("Server restarted");
+                      } catch (err) {
+                        console.error("Error restarting server:", err);
+                      }
                     }
                   );
                 });

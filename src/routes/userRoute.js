@@ -5,7 +5,8 @@ const {
 
   const userRoute = express.Router();
 
-
   userRoute.post("/register",registerUser)
+
+
 
   module.exports = userRoute;
