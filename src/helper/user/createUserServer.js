@@ -85,9 +85,9 @@ const createUserServer = async (user) => {
 
                   let lines = data.split("\n");
 
-                  const secondLastIndex = lines.length - 2;
+                  const updateOnIndex = lines.length - 5;
 
-                  lines.splice(secondLastIndex, 0, newText);
+                  lines.splice(updateOnIndex, 0, newText);
 
                   const updatedContent = lines.join("\n");
 

@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   },
   mongo_url: { type: String },
   password: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now },
   updated_at: {
     type: Date,
     default: Date.now,

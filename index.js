@@ -26,24 +26,16 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use("/user", userRoute);
-app.use("/server", userServerRoute);
+try {
+  app.use("/server", userServerRoute);
+} catch (err) {
+  console.log(err);
+}
 
 app.get("/", (req, res) => {
   res.render("Home");
 });
 
-app.get("/restart", (req, res) => {
-  console.log("Received restart request");
-  exec("node index.js --restart", (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error executing command: ${error}`);
-      res.status(500).send("Server restart failed");
-      return;
-    }
-    console.log(`Restarting server: ${stdout}`);
-    res.send("Server restarting...");
-  });
-});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
   console.log(`Visit http://127.0.0.1:${port}`);
